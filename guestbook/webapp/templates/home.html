@@ -1,0 +1,242 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>React Hello</title>
+        <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+        <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+        <!-- I know that I should not use it in production, but I am just playing now. -->
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
+    </head>
+    <body>
+        
+        <div id="container">
+            <header>
+                <h1>Guestbook</h1>
+            </header>
+            <section>
+                <section id="greeting">
+                    <p>Please leave me some message below. Be cultured, it is not a moderated platform.</p>
+                </section>
+                <div id="guestbookapp"></div>
+            </section>
+        </div>
+
+
+        <script type="text/babel">
+
+            function Header() {
+                return (
+                    <h1>Rabboh's React Playground</h1>
+                )
+            }
+
+            function Introduction() {
+                return (
+                    <h2>I am learning React frontend development right now</h2>
+                )
+            }
+
+            class WeightEvaluator extends React.Component {
+                render() {
+                    console.log(parseFloat(this.props.bmi));
+                    if (isNaN(parseFloat(this.props.bmi))) {
+                        return (
+                            <div className="bmi-unknown">Type your data...</div>
+                        );
+                    }
+                    if (this.props.bmi < 18.5) {
+                        return (
+                            <div className="bmi-underweight">Underweight</div>
+                        );
+                    } else if (this.props.bmi >=18.5 && this.props.bmi < 25) {
+                        return (
+                            <div className="bmi-healthy">Healthy weight</div>
+                        );
+                    } else if (this.props.bmi >=25 && this.props.bmi < 30) {
+                        return (
+                            <div className="bmi-overweight">Overweight</div>
+                        );
+                    } else if (this.props.bmi > 30) {
+                        return (
+                            <div className="bmi-obese">Obese</div>
+                        );
+                    } else {
+                        return (
+                            <div className="bmi-unknown">Type your data...</div>
+                        );
+                    }   
+                }
+            }
+
+            class BmiCalculator extends React.Component {
+
+                constructor(props) {
+                    super(props);
+                    this.state = { height: 0, weight: 0, bmi: 0 }
+                    this.handleChange = this.handleChange.bind(this);
+                }
+
+                handleChange(e) {
+                    if (e.target.name == 'height') {
+                        this.setState({height: event.target.value});
+                    }
+                    if (e.target.name == 'weight') {
+                        this.setState({weight: event.target.value});
+                    }
+                    this.calculateBmi()
+                }
+
+                calculateBmi() {
+                    var height = parseFloat(this.state.height);
+                    var weight = parseFloat(this.state.weight);
+                    if (isNaN(height) || isNaN(weight)) {
+                        return '';
+                    }
+                    if (this.props.heightScale == 'cm') {
+                        height = height / 100;
+                    }
+                    var calcBmi = weight/(height*height);
+                    this.setState({bmi: calcBmi});
+                }
+
+                render() {
+                    return (
+                        <div className="bmi-calculator-out">
+                            <div className="weight-evaluator">
+                                <WeightEvaluator bmi={this.state.bmi} />
+                            </div>
+                            <div className="bmi-calculator">
+                                <form action="">
+                                    <ul>
+                                        <li><input type="text" name="height" id="height" value={this.state.height} onKeyUp={this.handleChange} onChange={this.handleChange} /></li>
+                                        <li className="caption"><small>Your height in {this.props.heightScale}</small></li>
+                                        <li><input type="text" name="weight" id="weight" value={this.state.weight} onKeyUp={this.handleChange} onChange={this.handleChange} /></li>
+                                        <li className="caption"><small>Your weight in kg</small></li>
+                                        <li><input type="text" disabled="disabled" id="bmi" value={this.state.bmi} /></li> 
+                                        <li className="caption"><small>Your BMI</small></li>
+                                    </ul>
+                                </form>
+                            </div>
+                        </div>
+                    );
+                }
+
+            }
+
+            class ColorCalculator extends React.Component {
+
+                constructor(props) {
+                    super(props);
+                    this.state = { cr: 0, cg: 0, cb: 0, htmlhex: '' }
+                    this.handleChange = this.handleChange.bind(this);
+                }
+
+                handleChange(e) {
+                    if (e.target.name == 'cr') {
+                        this.setState({cr: e.target.value});
+                    }
+                    if (e.target.name == 'cg') {
+                        this.setState({cg: e.target.value});
+                    }
+                    if (e.target.name == 'cb') {
+                        this.setState({cb: e.target.value});
+                    }
+                    this.calculateHtmlColor();
+                }
+
+                componentToHex(c) {
+                    var hex = c.toString(16);
+                    return hex.length == 1 ? "0" + hex : hex;
+                }
+
+                rgbToHex(r, g, b) {
+                    return "#" + this.componentToHex(r) + this.componentToHex(g) + this.componentToHex(b);
+                }
+
+                calculateHtmlColor() {
+                    var hex = this.rgbToHex(this.state.cr, this.state.cg, this.state.cb)
+                    this.setState({ htmlhex: hex });
+                    document.getElementById('color-box').style.backgroundColor = hex;
+                }
+
+                render() {
+                    return (
+                        <div className="color-calculator">
+                            <div className="top">
+                                <div className="input-fields">
+                                    <ul>
+                                        <li>R: <input type="text" name="cr" id="cr" value={this.state.cr} onKeyUp={this.handleChange} onChange={this.handleChange} /></li>
+                                        <li>G: <input type="text" name="cg" id="cg" value={this.state.cg} onKeyUp={this.handleChange} onChange={this.handleChange} /></li>
+                                        <li>B: <input type="text" name="cb" id="cb" value={this.state.cb} onKeyUp={this.handleChange} onChange={this.handleChange} /></li>
+                                    </ul>
+                                </div>
+                                <div className="display-color">
+                                    <div id="color-box"></div>
+                                </div>
+                            </div>
+                            <div className="saved-items">
+
+                            </div>
+                        </div>
+                    );
+                }
+            }
+
+            class PostForm extends React.Component {
+                render() {
+                    return (
+                        <div id="postform">
+                            <form action="" method="">
+                                <div className="sl-fields">
+                                    <input type="text" name="nickname" id="nickname" placeholder="Nickname" />
+                                    <input type="text" name="email" id="email" placeholder="E-mail" />
+                                </div>
+                                <div className="ml-fields">
+                                    <textarea></textarea>
+                                </div>
+                                <div className="submitter">
+                                    <input type="button" value="Send message" />
+                                </div>
+                            </form>
+                        </div>
+                    );
+                }
+            }
+
+            class MessageList extends React.Component {
+
+                constructor(props) {
+                    super(props);
+                    useEffect(() => {
+                        fetch('http://127.0.0.1:8000/api/')
+                            .then(response => response.json())
+                            .then(data => console.log(data));
+                    });
+                }
+
+                render() {
+                    return (
+                        <div>list of messages please wait</div>
+                    )
+                }
+            }
+
+            function MyApp() {
+                return (
+                    <div>
+                        <PostForm />
+                        <MessageList />
+                    </div>
+                );
+            }
+
+            const container = document.getElementById('guestbookapp');
+            const root = ReactDOM.createRoot(container);
+            root.render(<MyApp />);
+
+        </script>
+    </body>
+</html>

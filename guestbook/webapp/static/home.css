@@ -1,0 +1,34 @@
+body {
+    background: lightsteelblue;
+    text-align: center;
+}
+
+#container {
+    max-width: 1000px;
+    background: ivory;
+    margin:0 auto;
+    text-align: left;
+    border: 2px dotted #0f0f0f;
+    padding: 15px;
+}
+
+header h1 {
+    padding: 0;
+    border: 0;
+    margin: 0;
+    border-bottom: 2px solid black;
+}
+
+#postform .ml-fields textarea {
+    width: 100%;
+    height: 80px;
+}
+
+#postform .sl-fields {
+    margin-bottom: 3px;
+}
+
+#postform .sl-fields input {
+    margin-right: 3px;
+    width: 30%;
+}
