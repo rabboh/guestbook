@@ -32,3 +32,17 @@ header h1 {
     margin-right: 3px;
     width: 30%;
 }
+
+#messages .message-item {
+    background-color: #f3dfa8;
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+#messages .message-item a {
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #c561c5;
+
+}
