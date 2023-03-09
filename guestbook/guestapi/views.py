@@ -11,7 +11,7 @@ class EntryApiView(APIView):
     permission_classes = []
 
     def get(self, request, *args, **kwargs):
-        entries = Entry.objects.all()
+        entries = Entry.objects.all().order_by('-created_at')
         serializer = EntrySerializer(entries, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

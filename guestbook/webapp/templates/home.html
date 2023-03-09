@@ -29,17 +29,45 @@
                 return msg;
             }
 
-            onload = function() {
+            function sendMessage() {
+                const nickname = document.getElementById('nickname').value;
+                const email = document.getElementById('email').value;
+                const message = document.getElementById('message').value;
+                
+                if (nickname == '' || email == '' || message == '') {
+                    alert('Please fill every field');
+                } else {
+                    postData("http://127.0.0.1:8000/api/", {nickname: nickname, email: email, message: message}).then((data) => {
+                        refreshMessages();
+                        emptyFields();
+                        alert('Thank you for your message!');
+                    });
+                }
+            }
+
+            function refreshMessages() {
                 getData("http://127.0.0.1:8000/api").then((data) => {
                     root = document.getElementById('messages');
+                    root.innerHTML = '';
                     for(let i = 0; i < data.length; i++) {
                         const currElem = data[i];
-                        console.log(currElem);
                         msg = createMessageItem(currElem);
                         root.appendChild(msg);
                     }
                 });
             }
+
+            function emptyFields() {
+                document.getElementById('nickname').value = '';
+                document.getElementById('email').value = '';
+                document.getElementById('message').value = '';
+            }
+
+            onload = function() {
+                document.getElementById('submitbutton').onclick = sendMessage;
+                refreshMessages();
+            }
+
         </script>
     </head>
     <body>
@@ -53,11 +81,18 @@
                     <p>Please leave me some message below. Be cultured, it is not a moderated platform.</p>
                 </section>
                 <div id="submitform">
-
+                    <div class="credentials">
+                        <input type="text" name="nickname" id="nickname" placeholder="Nickname" />
+                        <input type="text" name="email" id="email" placeholder="E-mail" />
+                    </div>
+                    <div class="message">
+                        <textarea name="message" id="message"></textarea>
+                    </div>
+                    <div class="submit">
+                        <button id="submitbutton">Submit</button>
+                    </div>
                 </div>
-                <div id="messages">
-
-                </div>
+                <div id="messages"></div>
             </section>
         </div>
 

@@ -44,5 +44,24 @@ header h1 {
     font-weight: bold;
     text-decoration: none;
     color: #c561c5;
+}
 
+#submitform {
+    background: #dfdfdf;
+    padding: 8px;
+    margin-bottom: 15px;
+}
+
+#submitform input {
+    width: 30%; 
+    margin-right: 8px; 
+    margin-bottom: 8px;
+    border: 1px solid #afafaf;
+}
+
+#submitform textarea {
+    width: 95%;
+    height: 80px;
+    border: 1px solid #afafaf;
+    font-family: 'Courier New', Courier, monospace;
 }
